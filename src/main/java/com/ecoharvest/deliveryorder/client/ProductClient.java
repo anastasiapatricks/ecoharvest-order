@@ -11,7 +11,7 @@ public class ProductClient {
 
     @Autowired
     public ProductClient(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:9002").build();
+        this.webClient = webClientBuilder.baseUrl("https://5fholgbq0b.execute-api.us-east-1.amazonaws.com/product-service").build();
     }
 
     public Product getProductDetails(String productId) {
