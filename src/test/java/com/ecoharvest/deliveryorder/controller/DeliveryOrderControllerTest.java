@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -31,6 +32,7 @@ public class DeliveryOrderControllerTest {
     private DeliveryOrderController controller;
 
     private static final Long INPUT_ID = 1L;
+    private static final Long INPUT_USER_ID = 1L;
 
     @BeforeAll
     static void setup() {}
@@ -64,12 +66,37 @@ public class DeliveryOrderControllerTest {
     }
 
     @Test
-    @DisplayName("Basic test for GET request: Get an order")
-    public void testGetOrderRequest() {
+    @DisplayName("Basic test for GET request: Get all order")
+    public void testGetAllOrderRequest() {
         List<DeliveryOrder> mockExpectedValue = Arrays.asList(createMockDeliveryOrder());
         when(service.findAll()).thenReturn(mockExpectedValue);
 
         ResponseEntity responseEntity = controller.findAll();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(mockExpectedValue, responseEntity.getBody());
+    }
+
+    @Test
+    @DisplayName("Basic test for GET request: Get an order")
+    public void testGetOrderByIdRequest() {
+        Optional<DeliveryOrder> mockExpectedValue = Optional.of(createMockDeliveryOrder());
+        when(service.findById(INPUT_ID)).thenReturn(mockExpectedValue);
+
+        ResponseEntity responseEntity = controller.findOne(INPUT_ID);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(mockExpectedValue, responseEntity.getBody());
+    }
+
+
+    @Test
+    @DisplayName("Basic test for GET request: Get all order by userId")
+    public void testGetAllOrderByUserIdRequest() {
+        List<DeliveryOrder> mockExpectedValue = Arrays.asList(createMockDeliveryOrder());
+        when(service.findAllByUserId(INPUT_USER_ID)).thenReturn(mockExpectedValue);
+
+        ResponseEntity responseEntity = controller.findAllByUserName(INPUT_USER_ID);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(mockExpectedValue, responseEntity.getBody());
